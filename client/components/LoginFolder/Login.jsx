@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
 import LoginForm from "./LoginForm.jsx";
+import Home from '../Home.jsx';
 
 import authToken from './helpers/authToken'
 
@@ -41,10 +42,7 @@ const Login = ({ attemptLogin }) => {
   return(
     <div>
       {(user.username !== '') ? (
-        <div className="welcome">
-            <h2>Welcome, <span>{user.username}</span></h2>
-            <button>Logout</button>
-        </div>
+        <Home/>
       ) : (
         <LoginForm loginFunc={loginFunc} error={error}/>
       ) }
@@ -52,27 +50,6 @@ const Login = ({ attemptLogin }) => {
   );
 };
 
-const mapDispatchToProps = (dispatch) => ({
-  attemptLogin: async() => {
-    // try{
-    //   const token = window.localStorage.getItem('token');
 
-    //   if(token){
-    //     const { data:userAPI } = await axios.get('/api/auth', {
-    //       headers: {
-    //         authorization: token,
-    //       },
-    //     });
 
-    //     if(userAPI){
-    //       setUser({...user, userAPI})
-    //       return true;
-    //     }
-    //   }
-    // } catch(err){
-    //   console.log(err);
-    // }
-  }
-});
-
-export default connect(null,mapDispatchToProps)(Login);
+export default connect(null,null)(Login);
