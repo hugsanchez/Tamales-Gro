@@ -40,7 +40,7 @@ User.authenticate = async({ username, password }) => {
     });
 
     if(user && (await bcrypt.compare(password, user.password))){
-      return jwt.sign({ id: user.id }, process.env.JWT);
+      return jwt.sign({ id: user.id }, process.env.ACCESS_TOKEN_SECRET);
     } else {
       const error = Error("Bad Credentials");
       error.status = 401;
@@ -54,7 +54,7 @@ User.authenticate = async({ username, password }) => {
 
 User.findByToken = async(token) => {
   try{
-    const { id } = jwt.verify(token, process.env.JWT);
+    const { id } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
 
     const user = await User.findByPk(id);
     if(user) return user;

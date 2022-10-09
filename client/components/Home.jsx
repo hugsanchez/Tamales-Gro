@@ -9,8 +9,16 @@ const Home = () => {
 
   useEffect(() => {
     const getOrders = async() => {
-      const { data: ordersAPI } = await axios.get('/api/order');
-      setOrders(ordersAPI);
+      try{
+        const { data: ordersAPI } = await axios.get('/api/order',{
+          headers: {
+            authorization: window.localStorage.getItem('token')
+          }
+        });
+        setOrders(ordersAPI);
+      } catch(err){
+        console.log(err);
+      }
     };
     getOrders();
   }, []);

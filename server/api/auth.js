@@ -4,10 +4,10 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
+
 router.post('/', async(req,res,next) => {
   try{
     const { username, password } = req.body;
-  
     const token = await User.authenticate({ username, password });
     res.status(201).send({ token });
   } catch(err){

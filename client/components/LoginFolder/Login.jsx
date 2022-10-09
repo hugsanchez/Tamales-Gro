@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
@@ -8,24 +8,44 @@ import Home from '../Home.jsx';
 
 import authToken from './helpers/authToken'
 
-const Login = ({ attemptLogin }) => {
+const Login = () => {
   const navigate = useNavigate();
 
   const [user, setUser] = useState({username: '', password: ''});
   const [error, setError] = useState('');
+  let token = window.localStorage.getItem('token');
+  useEffect(() => {
+    const afterLogin = async() => {
+      try{
+        if(window.localStorage.getItem('token')){
+          if(token){
+            const { data: userAPI } = await axios.get('/api/auth', {
+              headers:{
+                authorization: token,
+              },
+            });
+            if(userAPI){
+              setUser({...user, ...userAPI})
+            }
+          }
+        }
+      } catch(err){
+        console.log(err);
+      }
+    }
+    afterLogin();
+  },[token])
 
   const loginFunc = async(details) => {
     try{
       await authToken(details);
-      const token = window.localStorage.getItem('token');
-
+      token = window.localStorage.getItem('token');
       if(token){
         const { data:userAPI } = await axios.get('/api/auth', {
           headers: {
             authorization: token,
           },
         });
-
         if(userAPI){
           setUser({...user, ...userAPI})
         }
@@ -36,16 +56,20 @@ const Login = ({ attemptLogin }) => {
   };
 
   const logoutFunc = () => {
-    console.log('logout')
-  }
+    console.log('here')
+    window.localStorage.removeItem('token');
+    setUser({username: '', password:''})
+  };
 
   return(
     <div>
+
       {(user.username !== '') ? (
         <Home/>
       ) : (
         <LoginForm loginFunc={loginFunc} error={error}/>
       ) }
+      <button onClick={logoutFunc}>Logout</button>
     </div>
   );
 };
