@@ -4,8 +4,16 @@ import axios from 'axios';
 
 import Order from "./OrdersFolder/Order.jsx";
 
+import '../../public/css/order.css';
+
 const Home = () => {
   const [orders, setOrders] = useState([]);
+
+  const columns = [
+    {field: 'id',},
+    {field: 'total'},
+    {field: 'date'}
+  ]
 
   useEffect(() => {
     const getOrders = async() => {
@@ -25,7 +33,7 @@ const Home = () => {
   return (
     <div>
     <h4>Order Table:</h4>
-    <Order data={orders}/>
+    <Order data={orders} columns={columns}/>
   </div>
   )
 }

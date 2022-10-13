@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import LoginForm from "./LoginForm.jsx";
 import Home from '../Home.jsx';
+import Loader from "../Loader.jsx";
 
 import authToken from './helpers/authToken'
 
@@ -13,18 +14,24 @@ const Login = () => {
 
   const [user, setUser] = useState({username: '', password: ''});
   const [error, setError] = useState('');
+
+  const [loader, showLoader, hideLoader] = Loader();
+
+
   let token = window.localStorage.getItem('token');
   useEffect(() => {
     const afterLogin = async() => {
       try{
         if(window.localStorage.getItem('token')){
           if(token){
+            showLoader();
             const { data: userAPI } = await axios.get('/api/auth', {
               headers:{
                 authorization: token,
               },
             });
             if(userAPI){
+              hideLoader();
               setUser({...user, ...userAPI})
             }
           }
@@ -56,7 +63,6 @@ const Login = () => {
   };
 
   const logoutFunc = () => {
-    console.log('here')
     window.localStorage.removeItem('token');
     setUser({username: '', password:''})
   };
@@ -70,6 +76,7 @@ const Login = () => {
         <LoginForm loginFunc={loginFunc} error={error}/>
       ) }
       <button onClick={logoutFunc}>Logout</button>
+      {loader}
     </div>
   );
 };

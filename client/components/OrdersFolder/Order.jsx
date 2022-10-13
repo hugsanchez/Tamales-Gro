@@ -1,20 +1,32 @@
 import React from "react";
 import { connect } from "react-redux";
 
-const Order = ({ data }) => {
+const Order = ({ data = null, columns, hover = true, striped=true }) => {
+  const getCaps = (str) => {
+    if(str) return str.toUpperCase();
+  };
+
   return (
     <div>
       <table>
+        <thead>
+          <tr>
+            {columns.map((head, i) => ( 
+              <th key={i}>{getCaps(head.field)}</th>
+            ))}
+          </tr>
+        </thead>
         <tbody>
-          {data.map((row, id) => (
-          <tr key={id}>
-            <td>{row.id}</td>
-            <td>{row.date.slice(0,16)}</td>
-            <td>{row.total}</td>
+          {data && data.map((row, id) => (
+          <tr key={id} className={`${hover&& 'hover'} ${striped&& 'striped'}`}>
+            {columns.map((col, i) => ( 
+              <td key={i}>{row[col.field]}</td>
+            ))}
           </tr>
           ))}
         </tbody>
       </table>
+      {data.length ? null : <p>NO ROW TO SHOW!</p>}
     </div>
   )
 };
