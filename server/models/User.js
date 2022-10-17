@@ -52,17 +52,5 @@ User.authenticate = async({ username, password }) => {
 };
 
 
-User.findByToken = async(token) => {
-  try{
-    const { id } = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-    const user = await User.findByPk(id);
-    if(user) return user;
-  } catch(err){
-    const error = Error('User does NOT exist');
-    error.status = 401;
-    throw error;
-  }
-};
 
 module.exports = User;

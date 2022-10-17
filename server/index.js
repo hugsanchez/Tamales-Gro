@@ -2,6 +2,7 @@ const db = require('./db');
 
 const User = require('./models/User');
 const Order = require('./models/Order');
+const Product = require('./models/Product');
 
 
 const syncAndSeed = async() => {
@@ -25,7 +26,22 @@ const syncAndSeed = async() => {
       total:300,
       date: new Date().toString()
     })
-  ])
+  ]);
+
+  const tamales = await Promise.all([
+    Product.create({
+      name: 'Rojo',
+      type: 'Tamale'
+    }),
+    Product.create({
+      name: 'Verde',
+      type: 'Tamale'
+    }),
+    Product.create({
+      name: 'Verde',
+      type: 'Tamale'
+    })
+  ]);
 };
 
 module.exports = {

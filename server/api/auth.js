@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/User');
 
+const authenticateToken = require('./helper/authenticateToken');
+
 
 router.post('/', async(req,res,next) => {
   try{
@@ -16,9 +18,9 @@ router.post('/', async(req,res,next) => {
 });
 
 
-router.get('/', async(req, res, next) => {
+router.get('/', authenticateToken, async(req, res, next) => {
   try{
-    const user = await User.findByToken(req.headers.authorization);
+    const user = await User.findByPk(req.user.id);
     res.send(user);
   } catch(err){
     next(err);

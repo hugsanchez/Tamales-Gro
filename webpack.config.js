@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const webpackConfig = {
+  devtool: 'eval-source-map',
   entry:{
     path: path.join(__dirname, './client/index.jsx'),
   },
@@ -20,7 +21,15 @@ const webpackConfig = {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
       },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        include: [path.resolve(__dirname, 'client')]
+      }
     ],
+  },
+  resolve:{
+    extensions: ['.ts', '.js', '.tsx','.jsx']
   },
   plugins: [
     new HtmlWebpackPlugin({
